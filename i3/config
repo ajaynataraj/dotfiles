@@ -44,17 +44,17 @@ set $ws8  "8:  "
 set $ws9  "9:  "
 set $ws10 "10: ஸ்ரீரங்கநாதன் "
 
-set $default_gaps_inner 0
+set $default_gaps_inner 10
 set $default_gaps_outer 0
 gaps inner $default_gaps_inner
 gaps outer $default_gaps_outer
 
-workspace $ws1 gaps inner 0
-workspace $ws1 gaps outer 0
-workspace $ws9 gaps inner 0
-workspace $ws9 gaps outer 0
-workspace $ws10 gaps inner 0
-workspace $ws10 gaps outer 0
+#workspace $ws1 gaps inner 0
+#workspace $ws1 gaps outer 0
+#workspace $ws9 gaps inner 0
+#workspace $ws9 gaps outer 0
+#workspace $ws10 gaps inner 0
+#workspace $ws10 gaps outer 0
 
 # workspace_auto_back_and_forth yes
 force_display_urgency_hint 0 ms
@@ -63,8 +63,11 @@ focus_on_window_activation urgent
 floating_minimum_size -1 x -1
 floating_maximum_size -1 x -1
 
-font pango:Hack, FontAwesome 12
+#no title for windows
+new_window 1pixel
 
+#font pango:Hack, FontAwesome 12
+font pango:UbuntuMono-regular, FontAwesome 12
 #                       BORDER      BACKGROUND  TEXT        INDICATOR   CHILD_BORDER
 client.focused         	$black      $black      $darkwhite  $darkblack  $darkblack
 client.unfocused        $black      $black      $white      $darkblack  $darkblack
@@ -87,6 +90,10 @@ client.background       $black
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Flashes the border whenever you switch windows or if you press $mod+;
+bindsym $mod+b exec i3-msg border pixel 3
+bindsym --release $mod+b exec i3-msg border pixel 0
+
 # start a terminal
 bindsym $mod+Return exec termite
 
@@ -97,7 +104,7 @@ bindsym $mod+g exec firefox
 bindsym $mod+n exec nautilus
 
 # start a text editor instance
-bindsym $mod+a exec subl3
+bindsym $mod+a exec code
 
 # start a spotify instance
 bindsym $mod+y exec spotify --ap=194.132.196.162
@@ -117,28 +124,28 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+j exec i3-msg border pixel 2; focus left
+bindsym $mod+k exec i3-msg border pixel 2; focus down
+bindsym $mod+l exec i3-msg border pixel 2; focus up
+bindsym $mod+semicolon exec i3-msg border pixel 2; focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+Left exec i3-msg border pixel 2; focus left
+bindsym $mod+Down exec i3-msg border pixel 2; focus down
+bindsym $mod+Up exec i3-msg border pixel 2; focus up
+bindsym $mod+Right exec i3-msg border pixel 2; focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+j exec i3-msg border pixel 2; move left
+bindsym $mod+Shift+k exec i3-msg border pixel 2; move down
+bindsym $mod+Shift+l exec i3-msg border pixel 2; move up
+bindsym $mod+Shift+semicolon exec i3-msg border pixel 2; move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left 35px
-bindsym $mod+Shift+Down move down 35px
-bindsym $mod+Shift+Up move up 35px
-bindsym $mod+Shift+Right move right 35px
+bindsym $mod+Shift+Left exec i3-msg border pixel 2; move left 35px
+bindsym $mod+Shift+Down exec i3-msg border pixel 2; move down 35px
+bindsym $mod+Shift+Up exec i3-msg border pixel 2; move up 35px
+bindsym $mod+Shift+Right exec i3-msg border pixel 2; move right 35px
 
 # split in horizontal orientation
 bindsym $mod+h split h
@@ -177,7 +184,8 @@ bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
-bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -275,8 +283,9 @@ bindsym Escape mode "default"
 bar {
         status_command i3blocks -c ~/.i3blocks.conf
 	i3bar_command i3bar -t
-	font pango:Hack, FontAwesome 12
-    	strip_workspace_numbers yes
+#font pango:Hack, FontAwesome 12
+ 	font pango:UbuntuMono-regular, FontAwesome 12
+	strip_workspace_numbers yes
 	
 	bindsym button4 nop
 	bindsym button5 nop
@@ -305,7 +314,8 @@ exec_always libinput-gestures
 #exec_always --no-startuo-id ~/.scripts/startup.sh
 exec_always xinput set-prop "DLL06E4:01 06CB:7A13 Touchpad" "libinput Tapping Enabled" 1
 
-exec_always --no-startup-id feh --bg-fill ~/Pictures/Misc/Wallpaper60.jpg
+exec_always --no-startup-id feh --bg-fill Pictures/Wallpapers/miles.jpg
+#exec_always --no-startup-id feh --bg-fill /home/ajn/Pictures/Misc/wallpaper_github_hrushikeshk.jpg
 # exec --no-startup-id /usr/libexec/gnome-settings-daemon-localeexec
 # exec --no-startup-id dconf write /org/gnome/settings-daemon/plugins/cursor/active false
 
@@ -319,16 +329,21 @@ bindsym Control+$mod+l exec i3lock -u -i ~/Pictures/Misc/reddit.png
 bindsym Print exec scrot '%Y-%m-%d-%T_$wx$h_scrot.png' -e 'mv $f ~/Pictures/screenshots/'
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 bindsym XF86AudioRaiseVolume --release exec pkill -RTMIN+1 i3blocks #increase sound volume
 bindsym XF86AudioLowerVolume --release exec pkill -RTMIN+1 i3blocks
 bindsym XF86AudioMute --release exec pkill -RTMIN+1 i3blocks
 
+bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+10 i3blocks
+
+
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 1 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 1 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
